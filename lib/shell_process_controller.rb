@@ -10,20 +10,11 @@ class SpawningProcessController < BasicProcessController
     timestamp = Time.now.strftime('%Y%m%d%H%M%S')
     pid = Process.pid
  
-    stdout_file = "#{@logdir}/process_#{pid}_#{timestamp}.stdout"
-    stderr_file = "#{@logdir}/process_#{pid}_#{timestamp}.stderr"
-    stdin_file = "/dev/null"
+    stdout = "#{@logdir}/process_#{pid}_#{timestamp}.stdout"
+    stderr = "#{@logdir}/process_#{pid}_#{timestamp}.stderr"
+    stdin = "/dev/null"
 
-    begin
-      if system("#{@script} > #{stdout_file} 2> #{stderr_file} < #{stdin_file}")
-        exit(0)
-      else
-        exit(1)
-      end
-    rescue => e
-      err.write("cannot spawn #{@script}, exception #{e}")
-      exit(1)
-    end
+    exec("#{@script} > #{stdout} 2> #{stderr} < #{stdin}")
 
   end
 end
