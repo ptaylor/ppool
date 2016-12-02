@@ -1,7 +1,7 @@
 
 require 'curses'
 
-class CursesProcessController < SpawningProcessController
+class TerminalProcessController < SpawningProcessController
 
   def initialize(size, script, logdir)
     super(script, logdir)

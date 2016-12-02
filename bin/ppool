@@ -10,8 +10,7 @@ end
 
 size = 10
 
-controller = CursesProcessController.new(size, "./test-cmd", logdir)
-#controller = SpawningProcessController.new("./test-cmd", logdir)
+controller = TerminalProcessController.new(size, "./test-cmd", logdir)
 
 process_pool = ProcessPool.new(controller)
 
