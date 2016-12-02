@@ -31,7 +31,7 @@ class CursesProcessController < SpawningProcessController
   def progress(stats)
 
     draw_window
-    secs = Time.new.to_i
+    time = gettime
     @win.attron(Curses.color_pair(3)|Curses::A_BOLD) {
       @win.setpos(2 , 5)
       @win.addstr("Time #{secs - @time_started}")
@@ -52,7 +52,16 @@ class CursesProcessController < SpawningProcessController
     #puts "!!! active #{stats[:active_processes]} started #{stats[:processes_started]} ended #{stats[:processes_ended]} errors #{stats[:errors]}"
   end
 
-   def init_window
+  def gettime
+    secs = Time.new.to_i - @time_started
+    hours = secs / (60 * 60)
+    mins = secs / 60
+    secs = secs % 60
+
+    return "%2d:%2d:%2d" % [hours, mins,secs]
+  end
+
+  def init_window
      
      Curses.init_screen
      Curses.start_color
