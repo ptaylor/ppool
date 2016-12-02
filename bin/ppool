@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'ppool'
+
+logdir = "logs"
+if ! Dir.exist?(logdir) 
+  Dir.mkdir(logdir)
+end
+
+size = 10
+
+controller = CursesProcessController.new(size, "./test-cmd", logdir)
+#controller = SpawningProcessController.new("./test-cmd", logdir)
+
+process_pool = ProcessPool.new(controller)
+
+process_pool.run
+
