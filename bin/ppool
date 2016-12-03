@@ -2,18 +2,48 @@
 
 require 'rubygems'
 require 'ppool'
+require 'optparse'
 
-logdir = "./logs"
+
+options = {
+    :logdir => "./logs",
+    :size => 1,
+    :basic => false,
+}
+
+$USAGE = "Usage: ppool [options] COMMAND ARGS..."
+
+
+OptionParser.new do |opts|
+  opts.banner = $USAGE
+
+  opts.on('-l', '--logs DIR',  'Log directory') { |v| options[:logdir] = v }
+  opts.on('-s', '--size SIZE', 'Initial pool size') { |v| options[:size] = v }
+  opts.on('-b', '--basic', 'Basic (non curses) verion') { |v| options[:basic] = true}
+
+  opts.on("-h", "--help", "Show this message") {
+        puts opts
+        exit
+  }
+
+end.parse!
+
+command = ARGV.join(' ')
+if command == ''
+  puts $USAGE
+  exit(1)
+end
+
+logdir = options[:logdir]
 if ! Dir.exist?(logdir) 
   Dir.mkdir(logdir)
 end
 
-size = 2
+if options[:basic]
+  controller = TerminalProcessController.new(options[:size], command, logdir)
+else 
+  controller = CursesProcessController.new(options[:size], command, logdir)
+end
 
-#controller = TerminalProcessController.new(size, "./bin/test-cmd", logdir)
-controller = CursesProcessController.new(size, "./bin/test-cmd", logdir)
-
-process_pool = ProcessPool.new(controller)
-
-process_pool.run
+ProcessPool.new(controller).run
 

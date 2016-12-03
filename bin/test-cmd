@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "test pid: $$"
+echo "test pid: $$, args: $*"
 echo 1>&2 "error test $$ `date`"
 
 s=`expr $RANDOM % 10`
@@ -13,3 +13,4 @@ sleep $s
 date
 
 exit $e
+
