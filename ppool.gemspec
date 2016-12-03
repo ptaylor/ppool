@@ -11,7 +11,9 @@ Gem::Specification.new do |s|
                   "lib/ppool.rb",
   		  "lib/process_pool.rb",
   		  "lib/basic_process_controller.rb",
-  		  "lib/spawning_process_controller.rb"
+  		  "lib/shell_process_controller.rb",
+  		  "lib/terminal_process_controller.rb",
+  		  "lib/curses_process_controller.rb"
 		]
   s.executables << 'ppool'
   s.add_runtime_dependency "curses", ['~> 1.0']

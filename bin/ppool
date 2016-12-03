@@ -39,10 +39,12 @@ if ! Dir.exist?(logdir)
   Dir.mkdir(logdir)
 end
 
+size = options[:size].to_i
+
 if options[:basic]
-  controller = TerminalProcessController.new(options[:size], command, logdir)
+  controller = TerminalProcessController.new(size, command, logdir)
 else 
-  controller = CursesProcessController.new(options[:size], command, logdir)
+  controller = CursesProcessController.new(size, command, logdir)
 end
 
 ProcessPool.new(controller).run
