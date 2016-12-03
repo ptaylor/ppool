@@ -18,21 +18,21 @@ Usage: ppool [options] COMMAND ARGS...
     -h, --help                       Show this message
 ```
 
-# Options 
+## Options 
 
 * **-s, --size SIZE**: Sets the initial size of the process pool to be SIZE (default 1).
 * **-l, --logs DIR**: Stores logfiles in the DIR directory (default './logs').
 * **-b, --basic**: Use a basic version rather than curses based version.
 * **-h, --help**: Display usage help message.
 
-# Key Controls
+## Key Controls
 
 * **'&uarr;'** or **'+'**: Increase the pool size by 1.  &uarr; does not work in basic mode.
 * **'&darr;'** or **'-'**: Decrease the pool size by 1. &darr; does not work in basic mode.
 * **'Q'** or **'q'**: - Sets the pool size to 0 and exits when there are no remaining processes.
 * **'X'** or **'x'**: - Exits immediately.
 
-# Examples 
+## Examples 
 
 Start a process pool of size 10 running the command './bin/test-cmd foo bar'
 ```
