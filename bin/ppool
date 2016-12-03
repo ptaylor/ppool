@@ -8,9 +8,10 @@ if ! Dir.exist?(logdir)
   Dir.mkdir(logdir)
 end
 
-size = 10
+size = 2
 
-controller = TerminalProcessController.new(size, "./test-cmd", logdir)
+#controller = TerminalProcessController.new(size, "./bin/test-cmd", logdir)
+controller = CursesProcessController.new(size, "./bin/test-cmd", logdir)
 
 process_pool = ProcessPool.new(controller)
 

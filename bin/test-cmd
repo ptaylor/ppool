@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "test pid: $$"
+echo 1>&2 "error test $$ `date`"
+
+s=`expr $RANDOM % 10`
+e=`expr $RANDOM % 2`
+
+echo "s=$s, e=$e"
+
+date
+sleep $s
+date
+
+exit $e

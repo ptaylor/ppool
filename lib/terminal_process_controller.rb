@@ -1,106 +1,123 @@
 
-require 'curses'
+require 'io/console'
+require 'io/wait'
 
-class TerminalProcessController < SpawningProcessController
+class TerminalProcessController < ShellProcessController
 
   def initialize(size, script, logdir)
     super(script, logdir)
-    @quit = false
+    @finishing = false
+    @finished = false
     @size = size
-    @time_started = Time.new.to_i
-    init_window
+    @msg = ""
+    @last_stats = {}
+    @count = 0
+
+    Signal.trap('INT') do 
+      finished
+    end
+
   end
 
   def running?
-    return !@quit
+    return !@finished
   end
 
   def num_processes
     return @size
   end
 
-
   def process_started(pid, num_processes) 
-
   end
 
   def process_ended(pid, status)
-    #@win.clear
   end
 
   def progress(stats)
 
-    draw_window
-    @win.attron(Curses.color_pair(3)|Curses::A_BOLD) {
-      @win.setpos(2 , 5)
-      @win.addstr("Time      #{time_running}")
-      @win.setpos(3 , 5)
-      @win.addstr("Size      #{@size}")
-      @win.setpos(4 , 5)
-      @win.addstr("Running   #{stats[:active_processes]}")
-      @win.setpos(5 , 5)
-      @win.addstr("Started   #{stats[:processes_started]}")
-      @win.setpos(6 , 5)
-      @win.addstr("Ended     #{stats[:processes_ended]}")
-      @win.setpos(7 , 5)
-      @win.addstr("Errors    #{stats[:errors]}")
-      @win.setpos(8 , 5)
-      @win.addstr("Logs      #{@logdir}")
-    }
+     if stats != @last_stats
+       if @count % 20 == 0
 
-    @win.refresh
+          puts "----------------------------------------------"
+          puts " Time     | Size  Active  Started Ended Errors"
+          puts "=============================================="
 
-    #puts "!!! active #{stats[:active_processes]} started #{stats[:processes_started]} ended #{stats[:processes_ended]} errors #{stats[:errors]}"
-  end
+       end
+       puts(" %s | %4d   %4d   %4d   %4d   %4d\n" % [time_running, @size, stats[:active_processes], stats[:processes_started], stats[:processes_ended], stats[:errors]])
+       @last_stats = stats
+       @count = @count + 1
+     end
 
-  def time_running
-    secs = Time.new.to_i - @time_started
-    hours = secs / (60 * 60)
-    mins = secs / 60
-    secs = secs % 60
+     process_keys
 
-    return "%.2d:%.2d:%.2d" % [hours, mins,secs]
-  end
+    if @finishing
+      info "finishing #{stats[:active_processes]}"
+      if stats[:active_processes] == 0
+        @finished = true
+      end
+    end
 
-  def init_window
-     
-     Curses.init_screen
-     Curses.start_color
-     Curses.init_pair(1, Curses::COLOR_BLUE, Curses::COLOR_BLACK) 
-     Curses.init_pair(2, Curses::COLOR_RED, Curses::COLOR_BLACK) 
-     Curses.init_pair(3, Curses::COLOR_WHITE, Curses::COLOR_BLACK) 
 
-     Curses.noecho
-     Curses.cbreak
-     Curses.nonl 
-     Curses.curs_set(0)
-
-     lines = Curses.lines
-     cols = Curses.cols
-
-     height = 12
-     width = 50
-
-     @win = Curses.stdscr
-     @win = Curses::Window.new(height, width, 2, 2)
-     @win.keypad = true
-     @win.nodelay = true
-
-     draw_window
-
-  end
-
-  def draw_window
-     @win.clear
-     @win.attron(Curses.color_pair(1)|Curses::A_NORMAL) {
-       @win.box('|', '-')
-     }
-     
   end
 
   def delay
     return 0.1
   end
+
+
+  def process_keys
+   
+    case read_ch
+    when '+'
+      @size = @size + 1
+      @last_stats = {}
+      puts ""
+    when '-'
+      @size = @size - 1
+      if @size < 0
+        @size = 0
+      end
+      @last_stats = {}
+      puts ""
+    when 'q'
+      @size = 0
+      @finishing = true
+      @last_stats = {}
+      puts ""
+    when 'Q'
+      @size = 0
+      @finishing = true
+      @last_stats = {}
+      puts ""
+    when 'x'
+      finished
+    when 'X'
+      finished
+    end
+
+  end
+
+  def read_ch
+    begin
+      system("stty raw") 
+      if $stdin.ready?
+        c = $stdin.getc
+        return c.chr
+      end
+    ensure
+      system("stty -raw")
+    end
+    return nil
+  end
+
+
+  def finished
+    system("stty -raw")
+    puts ""
+    exit(0)
+  end
+
+
 
 end
 

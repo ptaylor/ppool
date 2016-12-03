@@ -1,5 +1,9 @@
 class BasicProcessController 
 
+  def initialize
+    @time_started = Time.new.to_i
+  end
+
   def running?
     return true
   end
@@ -13,12 +17,8 @@ class BasicProcessController
   end
 
   def run_process 
-    t = rand(5) + 5
-    puts "> [#{Process.pid}] child sleeping #{t}"
-    sleep t
-    s = rand(3)
-    puts "> [#{Process.pid}] child exiting #{s}"
-    exit s
+    info "#{Process.pid} running"
+    exit 0
   end
 
   def process_ended(pid, status)
@@ -32,6 +32,20 @@ class BasicProcessController
   def delay
     return 0.1
   end
+
+  def info(m)
+    puts "+ #{m}"
+  end
+
+  def time_running
+    secs = Time.new.to_i - @time_started
+    hours = (secs / (60 * 60)) % 24
+    mins = (secs / 60) % 60
+    secs = secs % 60
+
+    return "%.2d:%.2d:%.2d" % [hours, mins,secs]
+  end
+
 
 end
 
