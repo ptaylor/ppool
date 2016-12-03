@@ -79,19 +79,12 @@ class TerminalProcessController < ShellProcessController
       end
       @last_stats = {}
       puts ""
-    when 'q'
+    when 'q', 'Q'
       @size = 0
       @finishing = true
       @last_stats = {}
       puts ""
-    when 'Q'
-      @size = 0
-      @finishing = true
-      @last_stats = {}
-      puts ""
-    when 'x'
-      finished
-    when 'X'
+    when 'x', 'X'
       finished
     end
 

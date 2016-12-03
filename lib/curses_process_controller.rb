@@ -137,22 +137,17 @@ class CursesProcessController < ShellProcessController
      @win.nodelay = true
 
     case @win.getch
-    when Curses::KEY_UP
+    when '+', Curses::KEY_UP
       @size = @size + 1
-    when Curses::KEY_DOWN
+    when '-', Curses::KEY_DOWN
       @size = @size - 1
       if @size < 0
         @size = 0
       end
-    when 'q'
+    when 'q', 'Q'
       @size = 0
       @finishing = true
-    when 'Q'
-      @size = 0
-      @finishing = true
-    when 'x'
-      finished
-    when 'X'
+    when 'x', 'X'
       finished
     end
   end 
