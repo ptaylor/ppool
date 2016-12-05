@@ -16,6 +16,7 @@ Usage: ppool [options] COMMAND ARGS...
     -d, --delay MSECS                Delay in millisecondsbetween checking the state of the pool (default 100)
     -b, --basic                      Basic (non curses) verion
     -l, --logdir DIR                 Log directory (default ./ppool-logs)
+    -r, --rmlogs                     Remove logs for processes that exited successfully
     -h, --help                       Show this message
 ```
 
@@ -25,6 +26,7 @@ Usage: ppool [options] COMMAND ARGS...
 * **-d, --delay MSECS**: The delay in milliseconds between checking the state of the pool (default 100ms).  Lower values make the pool more responsive at the cost of higher CPU usage.
 * **-b, --basic**: Use a basic version rather than curses based version.
 * **-l, --logdir DIR**: Stores logfiles in the DIR directory (default './ppool-logs').
+* **-r, --rmlogs**: Removes logs for processes that exited successfully leaving logs for processes that exited with a status > 0.
 * **-h, --help**: Display usage help message.
 
 ## Key Controls

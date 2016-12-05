@@ -26,8 +26,8 @@ require 'curses'
 
 class CursesProcessController < ShellProcessController
 
-  def initialize(size, delay, script, logdir)
-    super(script, logdir)
+  def initialize(size, delay, script, logdir, rmlogs)
+    super(script, logdir, rmlogs)
     @finishing = false
     @finished = false
     @size = size
@@ -49,9 +49,6 @@ class CursesProcessController < ShellProcessController
   def process_started(pid, num_processes) 
   end
 
-  def process_ended(pid, status)
-    #draw_window
-  end
 
   def progress(stats)
 
@@ -81,7 +78,6 @@ class CursesProcessController < ShellProcessController
     process_keys
 
     if @finishing
-      info "finishing #{stats[:active_processes]}"
       if stats[:active_processes] == 0
         @finished = true
       end

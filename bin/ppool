@@ -33,6 +33,7 @@ options = {
     :delay => 100,
     :basic => false,
     :logdir => "./ppool-logs",
+    :rmlogs => false
 }
 
 $USAGE = "Usage: ppool [options] COMMAND ARGS..."
@@ -44,6 +45,7 @@ OptionParser.new do |opts|
   opts.on('-s', '--size SIZE', 'Initial pool size') { |v| options[:size] = v }
   opts.on('-d', '--delay MSECS', 'The delay between checking the state of the process pool (default 100ms)') { |v| options[:delay] = v }
   opts.on('-b', '--basic', 'Basic (non curses) verion') { |v| options[:basic] = true}
+  opts.on('-r', '--rmlogs', 'Remove logs for processes that exited successfully') { |v| options[:rmlogs] = true}
   opts.on('-l', '--logdir DIR',  'Log directory') { |v| options[:logdir] = v }
 
   opts.on("-h", "--help", "Show this message") {
@@ -68,9 +70,9 @@ size = options[:size].to_i
 delay = options[:delay].to_i
 
 if options[:basic]
-  controller = TerminalProcessController.new(size, delay, command, logdir)
+  controller = TerminalProcessController.new(size, delay, command, logdir, options[:rmlogs])
 else 
-  controller = CursesProcessController.new(size, delay, command, logdir)
+  controller = CursesProcessController.new(size, delay, command, logdir, options[:rmlogs])
 end
 
 ProcessPool.new(controller).run

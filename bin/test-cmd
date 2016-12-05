@@ -4,7 +4,7 @@ echo "test pid: $$, args: $*"
 echo 1>&2 "error test $$ `date`"
 
 s=`expr $RANDOM % 10`
-e=`expr $RANDOM % 2`
+e=`expr $RANDOM % 3`
 
 echo "s=$s, e=$e"
 

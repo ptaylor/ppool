@@ -24,11 +24,14 @@
 
 class ShellProcessController < BasicProcessController
 
-  def initialize(script, logdir)
+  def initialize(script, logdir, rmlogs)
     super()
     @script = script
     @logdir = logdir
+    @rmlogs = rmlogs
     @log = File.open("#{logdir}/ppool.log", 'w')
+    @stdout_log = {}
+    @stderr_log = {}
 
   end
 
@@ -46,9 +49,31 @@ class ShellProcessController < BasicProcessController
 
   end
 
+  def process_ended(pid, status)
+
+    if @rmlogs && status == 0    
+      delete_log_file(pid, 'stderr')
+      delete_log_file(pid, 'stdout')
+    end
+     
+  end
+
   def info(m)
     @log.write("#{m}\n")
     @log.flush
+  end
+
+
+  def delete_log_file(pid, suffix)
+    begin 
+      Dir.glob("#{@logdir}/process_#{pid}_*.#{suffix}") { |file| 
+       info "deleting log file #{file} for process #{pid}"
+       File.delete(file)
+      }
+   rescue => e
+     info "error deleting log file for process #{pid}: #{e}"
+   end
+
   end
 
 end
