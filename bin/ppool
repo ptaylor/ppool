@@ -32,7 +32,7 @@ options = {
     :size => 1,
     :delay => 100,
     :basic => false,
-    :logdir => "./logs",
+    :logdir => "./ppool-logs",
 }
 
 $USAGE = "Usage: ppool [options] COMMAND ARGS..."
@@ -44,7 +44,7 @@ OptionParser.new do |opts|
   opts.on('-s', '--size SIZE', 'Initial pool size') { |v| options[:size] = v }
   opts.on('-d', '--delay MSECS', 'The delay between checking the state of the process pool (default 100ms)') { |v| options[:delay] = v }
   opts.on('-b', '--basic', 'Basic (non curses) verion') { |v| options[:basic] = true}
-  opts.on('-l', '--logs DIR',  'Log directory') { |v| options[:logdir] = v }
+  opts.on('-l', '--logdir DIR',  'Log directory') { |v| options[:logdir] = v }
 
   opts.on("-h", "--help", "Show this message") {
         puts opts
