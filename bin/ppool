@@ -29,9 +29,10 @@ require 'optparse'
 
 
 options = {
-    :logdir => "./logs",
     :size => 1,
+    :delay => 100,
     :basic => false,
+    :logdir => "./logs",
 }
 
 $USAGE = "Usage: ppool [options] COMMAND ARGS..."
@@ -41,6 +42,7 @@ OptionParser.new do |opts|
   opts.banner = $USAGE
 
   opts.on('-s', '--size SIZE', 'Initial pool size') { |v| options[:size] = v }
+  opts.on('-d', '--delay MSECS', 'The delay between checking the state of the process pool (default 100ms)') { |v| options[:delay] = v }
   opts.on('-b', '--basic', 'Basic (non curses) verion') { |v| options[:basic] = true}
   opts.on('-l', '--logs DIR',  'Log directory') { |v| options[:logdir] = v }
 
@@ -63,11 +65,12 @@ if ! Dir.exist?(logdir)
 end
 
 size = options[:size].to_i
+delay = options[:delay].to_i
 
 if options[:basic]
-  controller = TerminalProcessController.new(size, command, logdir)
+  controller = TerminalProcessController.new(size, delay, command, logdir)
 else 
-  controller = CursesProcessController.new(size, command, logdir)
+  controller = CursesProcessController.new(size, delay, command, logdir)
 end
 
 ProcessPool.new(controller).run

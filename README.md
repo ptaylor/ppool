@@ -13,6 +13,7 @@ gem install ppool
 ```
 Usage: ppool [options] COMMAND ARGS...
     -s, --size SIZE                  Initial pool size
+    -d, --delay MSECS                Delay in millisecondsbetween checking the state of the pool (default 100)
     -b, --basic                      Basic (non curses) verion
     -l, --logs DIR                   Log directory
     -h, --help                       Show this message
@@ -21,6 +22,7 @@ Usage: ppool [options] COMMAND ARGS...
 ## Options 
 
 * **-s, --size SIZE**: Sets the initial size of the process pool to be SIZE (default 1).
+* **-d, --delay MSECS**: The delay in milliseconds between checking the state of the pool (default 100ms).  Lower values make the pool more responsive at the cost of higher CPU usage.
 * **-b, --basic**: Use a basic version rather than curses based version.
 * **-l, --logs DIR**: Stores logfiles in the DIR directory (default './logs').
 * **-h, --help**: Display usage help message.

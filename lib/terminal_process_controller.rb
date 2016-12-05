@@ -27,11 +27,12 @@ require 'io/wait'
 
 class TerminalProcessController < ShellProcessController
 
-  def initialize(size, script, logdir)
+  def initialize(size, delay, script, logdir)
     super(script, logdir)
     @finishing = false
     @finished = false
     @size = size
+    @delay = delay
     @msg = ""
     @last_stats = {}
     @count = 0
@@ -84,7 +85,7 @@ class TerminalProcessController < ShellProcessController
   end
 
   def delay
-    return 0.1
+    return @delay / 1000
   end
 
 

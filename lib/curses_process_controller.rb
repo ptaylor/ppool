@@ -26,11 +26,12 @@ require 'curses'
 
 class CursesProcessController < ShellProcessController
 
-  def initialize(size, script, logdir)
+  def initialize(size, delay, script, logdir)
     super(script, logdir)
     @finishing = false
     @finished = false
     @size = size
+    @delay = delay
     @msg = ""
     @last_stats = {}
     init_window
@@ -90,7 +91,7 @@ class CursesProcessController < ShellProcessController
   end
 
   def delay
-    return 0.1
+    return @delay / 1000
   end
 
 
