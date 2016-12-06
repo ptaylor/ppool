@@ -70,10 +70,10 @@ size = options[:size].to_i
 delay = options[:delay].to_i
 
 if options[:basic]
-  controller = TerminalProcessController.new(size, delay, command, logdir, options[:rmlogs])
+  controller = PPool::TerminalProcessController.new(size, delay, command, logdir, options[:rmlogs])
 else 
-  controller = CursesProcessController.new(size, delay, command, logdir, options[:rmlogs])
+  controller = PPool::CursesProcessController.new(size, delay, command, logdir, options[:rmlogs])
 end
 
-ProcessPool.new(controller).run
+PPool::ProcessPool.new(controller).run
 

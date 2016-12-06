@@ -25,112 +25,113 @@
 require 'io/console'
 require 'io/wait'
 
-class TerminalProcessController < ShellProcessController
+module PPool
 
-  def initialize(size, delay, script, logdir, rmlogs)
-    super(script, logdir, rmlogs)
-    @finishing = false
-    @finished = false
-    @size = size
-    @delay = delay
-    @msg = ""
-    @last_stats = {}
-    @count = 0
+  class TerminalProcessController < ShellProcessController
 
-    Signal.trap('INT') do 
-      finished
+    def initialize(size, delay, script, logdir, rmlogs)
+      super(script, logdir, rmlogs)
+      @finishing = false
+      @finished = false
+      @size = size
+      @delay = delay
+      @msg = ""
+      @last_stats = {}
+      @count = 0
+
+      Signal.trap('INT') do 
+	finished
+      end
+
     end
 
-  end
+    def running?
+      return !@finished
+    end
 
-  def running?
-    return !@finished
-  end
+    def num_processes
+      return @size
+    end
 
-  def num_processes
-    return @size
-  end
+    def process_started(pid, num_processes) 
+    end
 
-  def process_started(pid, num_processes) 
-  end
+    def progress(stats)
 
-  def progress(stats)
+       if stats != @last_stats
+	 if @count % 20 == 0
 
-     if stats != @last_stats
-       if @count % 20 == 0
+	    puts "----------------------------------------------"
+	    puts " Time     | Size  Active  Started Ended Errors"
+	    puts "=============================================="
 
-          puts "----------------------------------------------"
-          puts " Time     | Size  Active  Started Ended Errors"
-          puts "=============================================="
-
+	 end
+	 puts(" %s | %4d   %4d   %4d   %4d   %4d\n" % [time_running, @size, stats[:active_processes], stats[:processes_started], stats[:processes_ended], stats[:errors]])
+	 @last_stats = stats
+	 @count = @count + 1
        end
-       puts(" %s | %4d   %4d   %4d   %4d   %4d\n" % [time_running, @size, stats[:active_processes], stats[:processes_started], stats[:processes_ended], stats[:errors]])
-       @last_stats = stats
-       @count = @count + 1
-     end
 
-     process_keys
+       process_keys
 
-    if @finishing
-      if stats[:active_processes] == 0
-        @finished = true
+      if @finishing
+	if stats[:active_processes] == 0
+	  @finished = true
+	end
       end
+
+
+    end
+
+    def delay
+      return @delay / 1000
     end
 
 
-  end
+    def process_keys
 
-  def delay
-    return @delay / 1000
-  end
-
-
-  def process_keys
-   
-    case read_ch
-    when '+'
-      @size = @size + 1
-      @last_stats = {}
-      puts ""
-    when '-'
-      @size = @size - 1
-      if @size < 0
-        @size = 0
+      case read_ch
+      when '+'
+	@size = @size + 1
+	@last_stats = {}
+	puts ""
+      when '-'
+	@size = @size - 1
+	if @size < 0
+	  @size = 0
+	end
+	@last_stats = {}
+	puts ""
+      when 'q', 'Q'
+	@size = 0
+	@finishing = true
+	@last_stats = {}
+	puts ""
+      when 'x', 'X'
+	finished
       end
-      @last_stats = {}
-      puts ""
-    when 'q', 'Q'
-      @size = 0
-      @finishing = true
-      @last_stats = {}
-      puts ""
-    when 'x', 'X'
-      finished
+
     end
 
-  end
-
-  def read_ch
-    begin
-      system("stty raw") 
-      if $stdin.ready?
-        c = $stdin.getc
-        return c.chr
+    def read_ch
+      begin
+	system("stty raw") 
+	if $stdin.ready?
+	  c = $stdin.getc
+	  return c.chr
+	end
+      ensure
+	system("stty -raw")
       end
-    ensure
+      return nil
+    end
+
+
+    def finished
       system("stty -raw")
+      puts ""
+      exit(0)
     end
-    return nil
+
   end
-
-
-  def finished
-    system("stty -raw")
-    puts ""
-    exit(0)
-  end
-
-
 
 end
-

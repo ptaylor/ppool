@@ -22,57 +22,61 @@
 # SOFTWARE.
 #
 
-class ShellProcessController < BasicProcessController
+module PPool
 
-  def initialize(script, logdir, rmlogs)
-    super()
-    @script = script
-    @logdir = logdir
-    @rmlogs = rmlogs
-    @log = File.open("#{logdir}/ppool.log", 'w')
-    @stdout_log = {}
-    @stderr_log = {}
+  class ShellProcessController < BasicProcessController
 
-  end
+    def initialize(script, logdir, rmlogs)
+      super()
+      @script = script
+      @logdir = logdir
+      @rmlogs = rmlogs
+      @log = File.open("#{logdir}/ppool.log", 'w')
+      @stdout_log = {}
+      @stderr_log = {}
 
-  def run_process
-
-    timestamp = Time.now.strftime('%Y%m%d%H%M%S')
-    pid = Process.pid
- 
-    stdout = "#{@logdir}/process_#{pid}_#{timestamp}.stdout"
-    stderr = "#{@logdir}/process_#{pid}_#{timestamp}.stderr"
-    stdin = "/dev/null"
-
-    info "running #{@script} output to #{stdout}"
-    exec("#{@script} > #{stdout} 2> #{stderr} < #{stdin}")
-
-  end
-
-  def process_ended(pid, status)
-
-    if @rmlogs && status == 0    
-      delete_log_file(pid, 'stderr')
-      delete_log_file(pid, 'stdout')
     end
-     
-  end
 
-  def info(m)
-    @log.write("#{m}\n")
-    @log.flush
-  end
+    def run_process
+
+      timestamp = Time.now.strftime('%Y%m%d%H%M%S')
+      pid = Process.pid
+
+      stdout = "#{@logdir}/process_#{pid}_#{timestamp}.stdout"
+      stderr = "#{@logdir}/process_#{pid}_#{timestamp}.stderr"
+      stdin = "/dev/null"
+
+      info "running #{@script} output to #{stdout}"
+      exec("#{@script} > #{stdout} 2> #{stderr} < #{stdin}")
+
+    end
+
+    def process_ended(pid, status)
+
+      if @rmlogs && status == 0    
+	delete_log_file(pid, 'stderr')
+	delete_log_file(pid, 'stdout')
+      end
+
+    end
+
+    def info(m)
+      @log.write("#{m}\n")
+      @log.flush
+    end
 
 
-  def delete_log_file(pid, suffix)
-    begin 
-      Dir.glob("#{@logdir}/process_#{pid}_*.#{suffix}") { |file| 
-       info "deleting log file #{file} for process #{pid}"
-       File.delete(file)
-      }
-   rescue => e
-     info "error deleting log file for process #{pid}: #{e}"
-   end
+    def delete_log_file(pid, suffix)
+      begin 
+	Dir.glob("#{@logdir}/process_#{pid}_*.#{suffix}") { |file| 
+	 info "deleting log file #{file} for process #{pid}"
+	 File.delete(file)
+	}
+     rescue => e
+       info "error deleting log file for process #{pid}: #{e}"
+     end
+
+    end
 
   end
 
