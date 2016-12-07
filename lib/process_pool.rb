@@ -76,13 +76,12 @@ module PPool
 	   end
 	 rescue => e
 	   doneWaiting = true
-	   #@controller.info "Exception #{e}"
 	 end
        end
 
        progress
 
-       sleep @controller.delay
+       Kernel.sleep @controller.delay
 
       end
       @controller.finished

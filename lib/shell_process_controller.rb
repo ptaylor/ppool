@@ -47,17 +47,15 @@ module PPool
       stdin = "/dev/null"
 
       info "running #{@script} output to #{stdout}"
-      exec("#{@script} > #{stdout} 2> #{stderr} < #{stdin}")
+      Kernel.exec("#{@script} > #{stdout} 2> #{stderr} < #{stdin}")
 
     end
 
     def process_ended(pid, status)
-
       if @rmlogs && status == 0    
-	delete_log_file(pid, 'stderr')
 	delete_log_file(pid, 'stdout')
+	delete_log_file(pid, 'stderr')
       end
-
     end
 
     def info(m)
@@ -72,9 +70,9 @@ module PPool
 	 info "deleting log file #{file} for process #{pid}"
 	 File.delete(file)
 	}
-     rescue => e
-       info "error deleting log file for process #{pid}: #{e}"
-     end
+      rescue => e
+        info "error deleting log file for process #{pid}: #{e}"
+      end
 
     end
 
