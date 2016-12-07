@@ -40,7 +40,12 @@ Gem::Specification.new do |s|
   		  "lib/curses_process_controller.rb"
 		]
   s.executables << 'ppool'
+
   s.add_runtime_dependency "curses", ['~> 1.0']
+  s.add_development_dependency "bundler", "~> 1.13"
+  s.add_development_dependency "rake", "~> 10.0"
+  s.add_development_dependency "rspec", "~> 3.0"
+
   s.homepage    =  'http://rubygems.org/gems/ppool'
   s.license     = 'MIT'
   s.required_ruby_version = ['~> 2.0']
