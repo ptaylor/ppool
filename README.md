@@ -14,6 +14,7 @@ gem install ppool
 Usage: ppool [options] COMMAND ARGS...
     -s, --size SIZE                  Initial pool size
     -d, --delay MSECS                Delay in millisecondsbetween checking the state of the pool (default 100)
+    -t, --time TIME                  Quit after a time period (specified in HH:MM:SS format)
     -b, --basic                      Basic (non curses) verion
     -l, --logdir DIR                 Log directory (default ./ppool-logs)
     -r, --rmlogs                     Remove logs for processes that exited successfully
@@ -24,6 +25,7 @@ Usage: ppool [options] COMMAND ARGS...
 
 * **-s, --size SIZE**: Sets the initial size of the process pool to be SIZE (default 1).
 * **-d, --delay MSECS**: The delay in milliseconds between checking the state of the pool (default 100ms).  Lower values make the pool more responsive at the cost of higher CPU usage.
+* **-t, --time**: Sets a time period after which the process pool is emptied.  Time can be specified in the following formats SS, MM:SS, HH:MM:SS.
 * **-b, --basic**: Use a basic version rather than curses based version.
 * **-l, --logdir DIR**: Stores logfiles in the DIR directory (default './ppool-logs').
 * **-r, --rmlogs**: Removes logs for processes that exited successfully leaving logs for processes that exited with a status > 0.
@@ -48,4 +50,8 @@ Start a process pool of size 3 using the non-curses mode running the command './
 ppool --basic --size 3 -- ./bin/test-cmd -n 2 -f bar
 ```
 
+Start a process pool of size 10 which exits after 5 minutes
+```
+ppool --size 10 --time 10:00 ./bin/test-cmd
+```
 

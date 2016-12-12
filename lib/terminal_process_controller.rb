@@ -42,7 +42,6 @@ module PPool
     end
 
 
-
     def progress(stats)
 
        if stats != @last_stats
@@ -65,8 +64,6 @@ module PPool
 	  finished
 	end
       end
-
-
     end
 
     def process_keys

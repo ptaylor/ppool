@@ -26,7 +26,6 @@ require "spec_helper"
 
 describe "process_pool" do
 
-
   before do
     @controller = double('controller')
     @process_pool = PPool::ProcessPool.new(@controller)

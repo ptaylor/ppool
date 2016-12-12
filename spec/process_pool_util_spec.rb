@@ -26,7 +26,6 @@ require "spec_helper"
 
 describe "process_pool_util" do
 
-
   [
 	{ :timespec => '01', :seconds => 1},
 	{ :timespec => '59', :seconds => 59},

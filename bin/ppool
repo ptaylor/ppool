@@ -27,7 +27,6 @@ require 'rubygems'
 require 'ppool'
 require 'optparse'
 
-
 options = {
     :size => 1,
     :delay => 100,
@@ -38,7 +37,6 @@ options = {
 }
 
 $USAGE = "Usage: ppool [options] COMMAND ARGS..."
-
 
 
 OptionParser.new do |opts|

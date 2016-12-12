@@ -89,7 +89,6 @@ module PPool
       @finished = true
     end
 
-
   end
 
 end

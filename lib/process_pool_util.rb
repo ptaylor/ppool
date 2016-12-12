@@ -25,45 +25,42 @@
 module PPool
   extend self
 
-  #class ProcessPoolUtil extend self
 
-    def convert_time_to_secs(timespec)
+  def convert_time_to_secs(timespec)
 
-      s = 0
-      m = 0
-      h = 0
+    s = 0
+    m = 0
+    h = 0
 
-      parts = timespec.split(':')
-      case parts.length
-	when 1
-	  s = parts[0].to_i
-	when 2
-	  s = parts[1].to_i
-	  m = parts[0].to_i
-	when 3
-	  s = parts[2].to_i
-	  m = parts[1].to_i
-	  h = parts[0].to_i
+    parts = timespec.split(':')
+    case parts.length
+      when 1
+	s = parts[0].to_i
+      when 2
+	s = parts[1].to_i
+	m = parts[0].to_i
+      when 3
+	s = parts[2].to_i
+	m = parts[1].to_i
+	h = parts[0].to_i
 
-	else
-	  raise ArgumentError.new('invalid timespec; too many parts')
-      end
-
-      if s < 0 || s > 59
-	raise ArgumentError.new('invalid timespec; seconds are invalid')
-      end
-
-      if m < 0 || m > 59
-	raise ArgumentError.new('invalid timespec; minutes are invalid')
-      end
-      if h < 0 || h > 24
-	raise ArgumentError.new('invalid timespec; hours are invalid')
-      end
-
-      return h * (60 * 60) + m * 60 + s
-
+      else
+	raise ArgumentError.new('invalid timespec; too many parts')
     end
 
+    if s < 0 || s > 59
+      raise ArgumentError.new('invalid timespec; seconds are invalid')
+    end
 
-  #end
+    if m < 0 || m > 59
+      raise ArgumentError.new('invalid timespec; minutes are invalid')
+    end
+    if h < 0 || h > 24
+      raise ArgumentError.new('invalid timespec; hours are invalid')
+    end
+
+    return h * (60 * 60) + m * 60 + s
+
+  end
+
 end
