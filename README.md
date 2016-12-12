@@ -50,8 +50,8 @@ Start a process pool of size 3 using the non-curses mode running the command './
 ppool --basic --size 3 -- ./bin/test-cmd -n 2 -f bar
 ```
 
-Start a process pool of size 10 which exits after 5 minutes
+Start a process pool of size 10 running the command 'sleep 3' which exits after 5 minutes
 ```
-ppool --size 10 --time 10:00 ./bin/test-cmd
+ppool --size 10 --time 05:00 sleep 3
 ```
 
