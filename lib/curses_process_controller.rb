@@ -26,31 +26,14 @@ require 'curses'
 
 module PPool
 
-  class CursesProcessController < ShellProcessController
+  class CursesProcessController < TimedProcessController
 
-    def initialize(size, delay, script, logdir, rmlogs)
-      super(script, logdir, rmlogs)
-      @finishing = false
-      @finished = false
-      @size = size
-      @delay = delay
+    def initialize(size, delay, script, time, logdir, rmlogs)
+      super(size, delay, script, time, logdir, rmlogs)
       @msg = ""
       @last_stats = {}
       init_window
     end
-
-    def running?
-      return !@finished
-    end
-
-    def num_processes
-      return @size
-    end
-
-
-    def process_started(pid, num_processes) 
-    end
-
 
     def progress(stats)
 
@@ -87,11 +70,6 @@ module PPool
       @win.refresh
 
     end
-
-    def delay
-      return @delay / 1000
-    end
-
 
     def init_window
 

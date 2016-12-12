@@ -53,8 +53,8 @@ module PPool
 
     def process_ended(pid, status)
       if @rmlogs && status == 0    
-	delete_log_file(pid, 'stdout')
-	delete_log_file(pid, 'stderr')
+	      delete_log_file(pid, 'stdout')
+	      delete_log_file(pid, 'stderr')
       end
     end
 
@@ -65,11 +65,11 @@ module PPool
 
 
     def delete_log_file(pid, suffix)
-      begin 
-	Dir.glob("#{@logdir}/process_#{pid}_*.#{suffix}") { |file| 
-	 info "deleting log file #{file} for process #{pid}"
-	 File.delete(file)
-	}
+      begin
+        Dir.glob("#{@logdir}/process_#{pid}_*.#{suffix}") { |file|
+	        info "deleting log file #{file} for process #{pid}"
+	        File.delete(file)
+	      }
       rescue => e
         info "error deleting log file for process #{pid}: #{e}"
       end

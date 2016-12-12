@@ -27,13 +27,18 @@ require 'io/wait'
 
 module PPool
 
-  class TerminalProcessController < TimedProcessController
+  class TimedProcessController < ShellProcessController
 
     def initialize(size, delay, script, time, logdir, rmlogs)
-      super(size, delay, script, time, logdir, rmlogs)
+      super(script, logdir, rmlogs)
+
+      @size = size
+      @time = time
+      #@finishing = false
+      @finished = false
+      @size = size
+      @delay = delay
       @msg = ""
-      @last_stats = {}
-      @count = 0
 
       Signal.trap('INT') do 
 	finished
@@ -41,77 +46,20 @@ module PPool
 
     end
 
-
-
-    def progress(stats)
-
-       if stats != @last_stats
-	 if @count % 20 == 0
-
-	    puts "----------------------------------------------"
-	    puts " Time     | Size  Active  Started Ended Errors"
-	    puts "=============================================="
-
-	 end
-	 puts(" %s | %4d   %4d   %4d   %4d   %4d\n" % [time_running, @size, stats[:active_processes], stats[:processes_started], stats[:processes_ended], stats[:errors]])
-	 @last_stats = stats
-	 @count = @count + 1
-       end
-
-       process_keys
-
-      if @finishing
-	if stats[:active_processes] == 0
-	  @finished = true
-	end
+    def running?
+      if @time != nil && time_running_secs > @time
+        @size = 0
+        @finishing = true
       end
-
-
+      return !@finished
     end
 
-    def process_keys
-
-      case read_ch
-      when '+'
-	@size = @size + 1
-	@last_stats = {}
-	puts ""
-      when '-'
-	@size = @size - 1
-	if @size < 0
-	  @size = 0
-	end
-	@last_stats = {}
-	puts ""
-      when 'q', 'Q'
-	@size = 0
-	@finishing = true
-	@last_stats = {}
-	puts ""
-      when 'x', 'X'
-	finished
-      end
-
+    def num_processes
+      return @size
     end
 
-    def read_ch
-      begin
-	system("stty raw") 
-	if $stdin.ready?
-	  c = $stdin.getc
-	  return c.chr
-	end
-      ensure
-	system("stty -raw")
-      end
-      return nil
-    end
-
-
-    def finished
-      system("stty -raw")
-      puts ""
-      exit(0)
+    def delay
+      return @delay / 1000
     end
 
   end

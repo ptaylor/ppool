@@ -64,12 +64,16 @@ module PPool
     end
 
     def time_running
-      secs = Time.now.to_i - @time_started
+      secs = time_running_secs
       hours = (secs / (60 * 60)) % 24
       mins = (secs / 60) % 60
       secs = secs % 60
 
       return "%.2d:%.2d:%.2d" % [hours, mins,secs]
+    end
+
+    def time_running_secs
+      Time.now.to_i - @time_started
     end
 
   end

@@ -33,10 +33,48 @@ options = {
     :delay => 100,
     :basic => false,
     :logdir => "./ppool-logs",
-    :rmlogs => false
+    :rmlogs => false,
+    :timespec => nil
 }
 
 $USAGE = "Usage: ppool [options] COMMAND ARGS..."
+
+def convert_time_to_secs(timespec)
+
+  s = 0
+  m = 0
+  h = 0
+
+  parts = timespec.split(':')
+  case parts.length
+    when 1
+      s = parts[0].to_i
+    when 2
+      s = parts[1].to_i
+      m = parts[0].to_i
+    when 3
+      s = parts[2].to_i
+      m = parts[1].to_i
+      h = parts[0].to_i
+
+    else
+      puts "ERROR"
+  end
+
+  if s < 0 || s > 59
+    raise ArgumentError.new('invalid timespec; seconds are invalid')
+  end
+
+  if m < 0 || m > 59
+    raise ArgumentError.new('invalid timespec; minutes are invalid')
+  end
+  if h < 0 || h > 24
+    raise ArgumentError.new('invalid timespec; hours are invalid')
+  end
+
+  return h * (60 * 60) + m * 60 + s
+
+end
 
 
 OptionParser.new do |opts|
@@ -44,6 +82,7 @@ OptionParser.new do |opts|
 
   opts.on('-s', '--size SIZE', 'Initial pool size') { |v| options[:size] = v }
   opts.on('-d', '--delay MSECS', 'The delay between checking the state of the process pool (default 100ms)') { |v| options[:delay] = v }
+  opts.on('-t', '--time TIME',  'Time limit') { |v| options[:timespec] = v }
   opts.on('-b', '--basic', 'Basic (non curses) verion') { |v| options[:basic] = true}
   opts.on('-r', '--rmlogs', 'Remove logs for processes that exited successfully') { |v| options[:rmlogs] = true}
   opts.on('-l', '--logdir DIR',  'Log directory') { |v| options[:logdir] = v }
@@ -69,10 +108,19 @@ end
 size = options[:size].to_i
 delay = options[:delay].to_i
 
+begin
+  time = options[:timespec] == nil ? nil : convert_time_to_secs(options[:timespec])
+  puts "TIME #{time}"
+rescue ArgumentError => e
+  puts $USAGE
+  puts "error: #{e.message}"
+  exit(1)
+end
+
 if options[:basic]
-  controller = PPool::TerminalProcessController.new(size, delay, command, logdir, options[:rmlogs])
+  controller = PPool::TerminalProcessController.new(size, delay, command, time, logdir, options[:rmlogs])
 else 
-  controller = PPool::CursesProcessController.new(size, delay, command, logdir, options[:rmlogs])
+  controller = PPool::CursesProcessController.new(size, delay, command, time, logdir, options[:rmlogs])
 end
 
 PPool::ProcessPool.new(controller).run
