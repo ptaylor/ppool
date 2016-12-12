@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/ptaylor/ppool'
   s.files       = [
                   "lib/ppool.rb",
+  		  "lib/process_pool_util.rb",
   		  "lib/process_pool.rb",
   		  "lib/basic_process_controller.rb",
   		  "lib/shell_process_controller.rb",
