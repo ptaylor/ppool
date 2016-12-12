@@ -24,9 +24,36 @@
 
 require "spec_helper"
 
-describe "ppool" do
+describe "process_pool_util" do
 
-  it "does something useful" do
 
+  [
+	{ :timespec => '01', :seconds => 1},
+	{ :timespec => '59', :seconds => 59},
+	{ :timespec => '1:05', :seconds => 65},
+	{ :timespec => '14:00', :seconds => 840},
+	{ :timespec => '1:00:00', :seconds => 3600},
+        { :timespec => '24:59:59', :seconds => 89999},
+
+  ].each do |data| 
+    it "convert_time_to_secs converts #{data[:timespec]} to #{data[:seconds]}" do 
+
+      expect(PPool.convert_time_to_secs(data[:timespec])).to eq(data[:seconds])
+
+    end
+  end
+
+  [ 
+    '60',
+    '05:03:04:01',
+    '60:01',
+    '25:00:00',
+    '-1'
+  ].each do |data| 
+    it "convert_time_to_secs raises ArgumentError for #{data}" do 
+
+      expect { PPool.convert_time_to_secs(data) }.to raise_error(ArgumentError)
+
+    end
   end
 end

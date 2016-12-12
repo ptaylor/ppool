@@ -22,11 +22,48 @@
 # SOFTWARE.
 #
 
-require "spec_helper"
+module PPool
+  extend self
 
-describe "ppool" do
+  #class ProcessPoolUtil extend self
 
-  it "does something useful" do
+    def convert_time_to_secs(timespec)
 
-  end
+      s = 0
+      m = 0
+      h = 0
+
+      parts = timespec.split(':')
+      case parts.length
+	when 1
+	  s = parts[0].to_i
+	when 2
+	  s = parts[1].to_i
+	  m = parts[0].to_i
+	when 3
+	  s = parts[2].to_i
+	  m = parts[1].to_i
+	  h = parts[0].to_i
+
+	else
+	  raise ArgumentError.new('invalid timespec; too many parts')
+      end
+
+      if s < 0 || s > 59
+	raise ArgumentError.new('invalid timespec; seconds are invalid')
+      end
+
+      if m < 0 || m > 59
+	raise ArgumentError.new('invalid timespec; minutes are invalid')
+      end
+      if h < 0 || h > 24
+	raise ArgumentError.new('invalid timespec; hours are invalid')
+      end
+
+      return h * (60 * 60) + m * 60 + s
+
+    end
+
+
+  #end
 end
