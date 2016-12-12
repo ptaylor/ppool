@@ -24,7 +24,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'ppool'
-  s.version     = '1.2.0'
+  s.version     = '1.2.1'
   s.date        = '2016-12-05'
   s.summary     = "Pool of processes running a single command"
   s.description = "Start of pool of processes running a single command and control the pool size via the keyboard."
