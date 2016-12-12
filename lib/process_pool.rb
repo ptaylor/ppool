@@ -84,7 +84,7 @@ module PPool
        Kernel.sleep @controller.delay
 
       end
-      @controller.finished
+      @controller.terminate
 
     end
 

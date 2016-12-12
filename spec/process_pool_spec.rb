@@ -42,7 +42,7 @@ describe "process_pool" do
   it "expects run to return if the controller is not running" do
     expect(@controller).to receive(:running?).once.and_return(false)
     expect_progress
-    expect(@controller).to receive(:finished).once
+    expect(@controller).to receive(:terminate).once
     @process_pool.run
 
   end
@@ -53,7 +53,7 @@ describe "process_pool" do
     expect(@controller).to receive(:running?).and_return(true, false)
     expect(@controller).to receive(:num_processes).and_return(1)
     expect_progress
-    expect(@controller).to receive(:finished).once
+    expect(@controller).to receive(:terminate).once
     expect(Process).to receive(:fork).and_return(1234)
     expect(@controller).to receive(:process_started).with(1234, 1)
     expect(@controller).to receive(:delay).once.and_return(0.25)

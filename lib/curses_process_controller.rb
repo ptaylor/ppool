@@ -62,9 +62,9 @@ module PPool
 
       process_keys
 
-      if @finishing
+      if finishing?
 	if stats[:active_processes] == 0
-	  @finished = true
+	  finished
 	end
       end
       @win.refresh
@@ -88,8 +88,6 @@ module PPool
        width = 70
 
        @win = Curses::Window.new(height, width, 2, 2)
-       #@win.keypad = true
-       #@win.nodelay = true
 
        draw_window 
     end
@@ -102,8 +100,9 @@ module PPool
 
     end
 
-    def finished
-      info "finished"
+    def terminate
+
+      info "terminate"
       Curses.close_screen 
 
       puts ""
@@ -134,17 +133,13 @@ module PPool
 
       case @win.getch
       when '+', Curses::KEY_UP
-	@size = @size + 1
+        inc_size
       when '-', Curses::KEY_DOWN
-	@size = @size - 1
-	if @size < 0
-	  @size = 0
-	end
+        dec_size
       when 'q', 'Q'
-	@size = 0
-	@finishing = true
+        finishing
       when 'x', 'X'
-	finished
+	terminate
       end
     end 
 

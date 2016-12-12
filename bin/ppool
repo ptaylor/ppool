@@ -74,7 +74,6 @@ delay = options[:delay].to_i
 
 begin
   time = options[:timespec] == nil ? nil : PPool.convert_time_to_secs(options[:timespec])
-  puts "TIME #{time}"
 rescue ArgumentError => e
   puts $USAGE
   puts "error: #{e.message}"

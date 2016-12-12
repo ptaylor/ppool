@@ -34,7 +34,7 @@ module PPool
 
       @size = size
       @time = time
-      #@finishing = false
+      @finishing = false
       @finished = false
       @size = size
       @delay = delay
@@ -58,9 +58,37 @@ module PPool
       return @size
     end
 
-    def delay
-      return @delay / 1000
+    def process_started(pid, num_processes) 
     end
+
+    def delay
+      return @delay / 1000.0
+    end
+
+    def inc_size
+      @size = @size + 1
+    end
+
+    def dec_size
+      @size = @size - 1
+      if @size < 0
+        @size = 0
+      end
+    end
+
+    def finishing
+      @size = 0
+      @finishing = true
+    end
+
+    def finishing?
+      return @finishing
+    end
+
+    def finished
+      @finished = true
+    end
+
 
   end
 

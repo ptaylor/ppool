@@ -36,7 +36,7 @@ module PPool
       @count = 0
 
       Signal.trap('INT') do 
-	finished
+	terminate
       end
 
     end
@@ -60,9 +60,9 @@ module PPool
 
        process_keys
 
-      if @finishing
+      if finishing?
 	if stats[:active_processes] == 0
-	  @finished = true
+	  finished
 	end
       end
 
@@ -73,23 +73,19 @@ module PPool
 
       case read_ch
       when '+'
-	@size = @size + 1
+        inc_size
 	@last_stats = {}
 	puts ""
       when '-'
-	@size = @size - 1
-	if @size < 0
-	  @size = 0
-	end
+        dec_size
 	@last_stats = {}
 	puts ""
       when 'q', 'Q'
-	@size = 0
-	@finishing = true
+        finishing
 	@last_stats = {}
 	puts ""
       when 'x', 'X'
-	finished
+	terminate
       end
 
     end
@@ -108,7 +104,7 @@ module PPool
     end
 
 
-    def finished
+    def terminate
       system("stty -raw")
       puts ""
       exit(0)
