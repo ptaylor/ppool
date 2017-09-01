@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# Copyright (c) 2016 Paul Taylor
+# Copyright (c) 2016, 2017 Paul Taylor
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 Gem::Specification.new do |s|
   s.name        = 'ppool'
-  s.version     = '1.2.1'
-  s.date        = '2016-12-05'
+  s.version     = '1.3.0'
+  s.date        = '2017-09-01'
   s.summary     = "Pool of processes running a single command"
   s.description = "Start of pool of processes running a single command and control the pool size via the keyboard."
   s.author      = "Paul Taylor"
