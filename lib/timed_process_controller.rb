@@ -76,6 +76,10 @@ module PPool
       end
     end
 
+    def set_size(s)
+      @size = s
+    end
+
     def finishing
       @size = 0
       @finishing = true

@@ -35,6 +35,7 @@ Usage: ppool [options] COMMAND ARGS...
 
 * **'&uarr;'** or **'+'**: Increase the pool size by 1.  &uarr; does not work in basic mode.
 * **'&darr;'** or **'-'**: Decrease the pool size by 1. &darr; does not work in basic mode.
+* **'0'..'9'**: Set the pool size to a value between 0 and 9.
 * **'q'**: - Gracefully quite.  This sets the pool size to 0 and waits for all running processes to finish before exiting.
 * **'x'**: - Exits immediately.
 

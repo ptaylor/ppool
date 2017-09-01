@@ -130,12 +130,15 @@ module PPool
        Curses.curs_set(0)
        @win.keypad = true
        @win.nodelay = true
-
-      case @win.getch
+	
+      c = @win.getch
+      case c
       when '+', Curses::KEY_UP
         inc_size
       when '-', Curses::KEY_DOWN
         dec_size
+      when '0'..'9'
+        set_size(c.to_i)
       when 'q', 'Q'
         finishing
       when 'x', 'X'
