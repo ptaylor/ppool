@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# Copyright (c) 2016 Paul Taylor
+# Copyright (c) 2016, 2017 Paul Taylor
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,9 @@ module PPool
       @started_count = 0
       @ended_count = 0
       @errors = 0
+      @process_start_time = {}
+      @avg_elapsed_time = 0
+      @total_elapsed_time = 0
     end
 
 
@@ -52,6 +55,7 @@ module PPool
 	    @controller.run_process
 	  end
 
+          @process_start_time[pid] = Time.now
 
 	  @active_processes = @active_processes + 1
 	  @controller.process_started(pid, @active_processes)
@@ -65,12 +69,15 @@ module PPool
 	 begin
 	   pidStatus = Process.wait2(-1, Process::WNOHANG)
 	   if pidStatus != nil
-	     @controller.process_ended(pidStatus[0], pidStatus[1].exitstatus)
+             endedPid = pidStatus[0]
+             @total_elapsed_time = @total_elapsed_time + (Time.now - @process_start_time.delete(endedPid)) * 1000
+	     @controller.process_ended(endedPid, pidStatus[1].exitstatus)
 	     @active_processes = @active_processes - 1 
 	     @ended_count = @ended_count + 1
 	     if pidStatus[1].exitstatus != 0 
 	       @errors = @errors + 1
 	     end
+             @avg_elapsed_time = (@total_elapsed_time / @ended_count).round()
 	   else 
 	     doneWaiting = true
 	   end
@@ -94,7 +101,8 @@ module PPool
 	  :active_processes => @active_processes, 
 	  :processes_started => @started_count, 
 	  :processes_ended => @ended_count, 
-	  :errors => @errors
+	  :errors => @errors,
+          :avg_elapsed_time => @avg_elapsed_time
        })
     end
 

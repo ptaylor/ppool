@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# Copyright (c) 2016 Paul Taylor
+# Copyright (c) 2016, 2017 Paul Taylor
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -47,12 +47,12 @@ module PPool
        if stats != @last_stats
 	 if @count % 20 == 0
 
-	    puts "----------------------------------------------"
-	    puts " Time     | Size  Active  Started Ended Errors"
-	    puts "=============================================="
+	    puts "----------------------------------------------------------"
+	    puts " Time     | Size  Active  Started Ended Errors Avg Elapsed"
+	    puts "=========================================================="
 
 	 end
-	 puts(" %s | %4d   %4d   %4d   %4d   %4d\n" % [time_running, @size, stats[:active_processes], stats[:processes_started], stats[:processes_ended], stats[:errors]])
+	 puts(" %s | %4d   %4d   %4d   %4d   %4d   %4d\n" % [time_running, @size, stats[:active_processes], stats[:processes_started], stats[:processes_ended], stats[:errors], stats[:avg_elapsed_time]])
 	 @last_stats = stats
 	 @count = @count + 1
        end

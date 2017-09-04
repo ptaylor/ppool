@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# Copyright (c) 2016 Paul Taylor
+# Copyright (c) 2016, 2017 Paul Taylor
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -43,21 +43,23 @@ module PPool
 
       @win.attron(Curses.color_pair(3)|Curses::A_BOLD) {
 	@win.setpos(2 , 5)
-	@win.addstr("Time      #{time_running}")
+	@win.addstr("Time                #{time_running}")
 	@win.setpos(3 , 5)
-	@win.addstr("Size      #{@size}")
+	@win.addstr("Size                #{@size}")
 	@win.setpos(4 , 5)
-	@win.addstr("Running   #{stats[:active_processes]}")
+	@win.addstr("Running             #{stats[:active_processes]}")
 	@win.setpos(5 , 5)
-	@win.addstr("Started   #{stats[:processes_started]}")
+	@win.addstr("Started             #{stats[:processes_started]}")
 	@win.setpos(6 , 5)
-	@win.addstr("Ended     #{stats[:processes_ended]}")
+	@win.addstr("Ended               #{stats[:processes_ended]}")
 	@win.setpos(7 , 5)
-	@win.addstr("Errors    #{stats[:errors]}")
+	@win.addstr("Avg Elapsed Time    #{stats[:avg_elapsed_time]} (ms)")
 	@win.setpos(8 , 5)
-	@win.addstr("Logs      #{@logdir}")
+	@win.addstr("Errors              #{stats[:errors]}")
 	@win.setpos(9 , 5)
-	@win.addstr("          #{@msg}")
+	@win.addstr("Logs                #{@logdir}")
+	@win.setpos(10 , 5)
+	@win.addstr("                    #{@msg}")
       }
 
       process_keys
@@ -106,14 +108,15 @@ module PPool
       Curses.close_screen 
 
       puts ""
-      puts "Time     #{time_running}"
-      puts "Size     #{@size}"
-      puts "Running  #{@last_stats[:active_processes]}"
-      puts "Started  #{@last_stats[:processes_started]}"
-      puts "Ended    #{@last_stats[:processes_ended]}"
-      puts "Errors   #{@last_stats[:errors]}"
-      puts "Logs     #{@logdir}"
-      puts "         #{@msg}"
+      puts "Time               #{time_running}"
+      puts "Size               #{@size}"
+      puts "Running            #{@last_stats[:active_processes]}"
+      puts "Started            #{@last_stats[:processes_started]}"
+      puts "Ended              #{@last_stats[:processes_ended]}"
+      puts "Avg Elapsed Time   #{@last_stats[:avg_elapsed_time]}"
+      puts "Errors             #{@last_stats[:errors]}"
+      puts "Logs               #{@logdir}"
+      puts "                   #{@msg}"
       puts ""
 
       exit(0)
