@@ -22,10 +22,16 @@
 # SOFTWARE.
 #
 
+VERSION = '1.5.0'
+DATE = Date.today.to_s
+
+puts "Version: #{VERSION}"
+puts "Date:    #{DATE}"
+
 Gem::Specification.new do |s|
   s.name        = 'ppool'
-  s.version     = '1.5.0'
-  s.date        = '2017-09-01'
+  s.version     = VERSION
+  s.date        = DATE
   s.summary     = "Pool of processes running a single command"
   s.description = "Start of pool of processes running a single command and control the pool size via the keyboard."
   s.author      = "Paul Taylor"
