@@ -68,23 +68,31 @@ module PPool
 
     def process_keys
 
-      case read_ch
+      c = read_ch
+      case c
       when '+'
         inc_size
 	@last_stats = {}
-	puts ""
+	erase_input
       when '-'
         dec_size
 	@last_stats = {}
-	puts ""
+	erase_input
+      when '0'..'9'
+        set_size(c.to_i)
+	erase_input
       when 'q', 'Q'
         finishing
 	@last_stats = {}
-	puts ""
+	erase_input
       when 'x', 'X'
 	terminate
       end
 
+    end
+
+    def erase_input 
+        puts "\r "
     end
 
     def read_ch
