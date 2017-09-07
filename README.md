@@ -60,6 +60,6 @@ ppool --size 10 --time 05:00 sleep 3
 
 Start a process pool of size 5 showing the average elapsed time of the last 20 processes:
 ```
-ppool --size 5 --average ./bin/test-cmd
+ppool --size 5 --average 20 ./bin/test-cmd
 ```
 
