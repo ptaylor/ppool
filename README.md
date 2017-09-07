@@ -13,11 +13,12 @@ gem install ppool
 ```
 Usage: ppool [options] COMMAND ARGS...
     -s, --size SIZE                  Initial pool size
-    -d, --delay MSECS                Delay in millisecondsbetween checking the state of the pool (default 100)
-    -t, --time TIME                  Quit after a time period (specified in HH:MM:SS format)
+    -d, --delay MSECS                The delay between checking the state of the process pool (default 100ms)
+    -t, --time TIME                  Time limit
     -b, --basic                      Basic (non curses) verion
-    -l, --logdir DIR                 Log directory (default ./ppool-logs)
     -r, --rmlogs                     Remove logs for processes that exited successfully
+    -a, --average NUM                Number of processes used to calculate average elapsed time
+    -l, --logdir DIR                 Log directory
     -h, --help                       Show this message
 ```
 
@@ -29,6 +30,7 @@ Usage: ppool [options] COMMAND ARGS...
 * **-b, --basic**: Use a basic version rather than curses based version.
 * **-l, --logdir DIR**: Stores logfiles in the DIR directory (default './ppool-logs').
 * **-r, --rmlogs**: Removes logs for processes that exited successfully leaving logs for processes that exited with a status > 0.
+* **-a, --average NUM**: Uses the last NUM processes when calculating the average elapsed time.  The default value is 0 which means the elapsed time for all processes are used.
 * **-h, --help**: Display usage help message.
 
 ## Key Controls
@@ -54,5 +56,10 @@ ppool --basic --size 3 -- ./bin/test-cmd -n 2 -f bar
 Start a process pool of size 10 running the command 'sleep 3' which exits after 5 minutes
 ```
 ppool --size 10 --time 05:00 sleep 3
+```
+
+Start a process pool of size 5 showing the average elapsed time of the last 20 processes:
+```
+ppool --size 5 --average ./bin/test-cmd
 ```
 

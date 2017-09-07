@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# Copyright (c) 2016 Paul Taylor
+# Copyright (c) 2016, 2017 Paul Taylor
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,4 +30,5 @@ require "shell_process_controller.rb"
 require "timed_process_controller.rb"
 require "terminal_process_controller.rb"
 require "curses_process_controller.rb"
+require "time_stats.rb"
 

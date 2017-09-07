@@ -26,15 +26,13 @@ module PPool
 
   class ProcessPool
 
-    def initialize(controller)
+    def initialize(controller, average_size)
       @controller = controller
+      @time_stats = TimeStats.new(average_size)
       @active_processes = 0
       @started_count = 0
       @ended_count = 0
       @errors = 0
-      @process_start_time = {}
-      @avg_elapsed_time = 0
-      @total_elapsed_time = 0
     end
 
 
@@ -55,7 +53,7 @@ module PPool
 	    @controller.run_process
 	  end
 
-          @process_start_time[pid] = Time.now
+          @time_stats.process_started(pid)
 
 	  @active_processes = @active_processes + 1
 	  @controller.process_started(pid, @active_processes)
@@ -70,14 +68,14 @@ module PPool
 	   pidStatus = Process.wait2(-1, Process::WNOHANG)
 	   if pidStatus != nil
              endedPid = pidStatus[0]
-             @total_elapsed_time = @total_elapsed_time + (Time.now - @process_start_time.delete(endedPid)) * 1000
+             @time_stats.process_ended(endedPid)
+
 	     @controller.process_ended(endedPid, pidStatus[1].exitstatus)
 	     @active_processes = @active_processes - 1 
 	     @ended_count = @ended_count + 1
 	     if pidStatus[1].exitstatus != 0 
 	       @errors = @errors + 1
 	     end
-             @avg_elapsed_time = (@total_elapsed_time / @ended_count).round()
 	   else 
 	     doneWaiting = true
 	   end
@@ -102,7 +100,7 @@ module PPool
 	  :processes_started => @started_count, 
 	  :processes_ended => @ended_count, 
 	  :errors => @errors,
-          :avg_elapsed_time => @avg_elapsed_time
+          :avg_elapsed_time => @time_stats.average_elapsed_time
        })
     end
 
