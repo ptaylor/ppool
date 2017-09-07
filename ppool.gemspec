@@ -22,7 +22,7 @@
 # SOFTWARE.
 #
 
-VERSION = '1.5.0'
+VERSION = '1.5.1'
 DATE = Date.today.to_s
 
 puts "Version: #{VERSION}"
@@ -45,7 +45,8 @@ Gem::Specification.new do |s|
   		  "lib/shell_process_controller.rb",
   		  "lib/timed_process_controller.rb",
   		  "lib/terminal_process_controller.rb",
-  		  "lib/curses_process_controller.rb"
+  		  "lib/curses_process_controller.rb",
+  		  "lib/time_stats.rb"
 		]
   s.executables << 'ppool'
 
