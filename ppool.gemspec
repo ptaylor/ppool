@@ -52,7 +52,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "curses", ['~> 1.0']
   s.add_development_dependency "bundler", "~> 1.13"
-  s.add_development_dependency "rake", "~> 10.0"
+  s.add_development_dependency "rake", ">= 12.3.3"	
   s.add_development_dependency "rspec", "~> 3.0"
 
   s.homepage    =  'http://rubygems.org/gems/ppool'
